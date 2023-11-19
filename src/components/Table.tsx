@@ -1,11 +1,13 @@
+export type TableRow = Record<string, any>;
 
 
 interface TableProps {
     headers: string[];
-    rows: string[][];
+    rows: TableRow[];
+    onClick?: () => void;
 }
 
-const TableComponent = ({ headers, rows }: TableProps) => {
+const TableComponent = ({ headers, rows, onClick }: TableProps) => {
     return (
         <table className="min-w-full bg-white">
             <thead>
@@ -18,15 +20,21 @@ const TableComponent = ({ headers, rows }: TableProps) => {
                 </tr>
             </thead>
             <tbody>
-                {rows.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                        {row.map((cell, cellIndex) => (
+                {rows?.length > 0 ? rows.map((row, rowIndex) => (
+                    <tr key={rowIndex} onClick={onClick} className="hover:bg-gray-100 hover:cursor-pointer"> 
+                        {headers.map((header, cellIndex) => (
                             <td key={cellIndex} className="py-2 px-4 border-b border-gray-200 text-sm">
-                                {cell}
+                                {row[header]}
                             </td>
                         ))}
                     </tr>
-                ))}
+                )) : (
+                    <tr>
+                        <td className="py-2 px-4 border-b border-gray-200 text-sm text-center" colSpan={headers.length}>
+                            No data
+                        </td>
+                    </tr>
+                )}
             </tbody>
         </table>
     );

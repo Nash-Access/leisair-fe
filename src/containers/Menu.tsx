@@ -12,7 +12,7 @@ const Menu = ({ menuList }: MenuProps) => {
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto gap-6 px-6">
                 {menuList.map((item) => {
                     return (
-                        <a href={item.href} className="block mt-4 lg:inline-block lg:mt-0 text-gray-200 font-bold text-3xl hover:text-white mr-4">
+                        <a key={item.name} href={item.href} className="block mt-4 lg:inline-block lg:mt-0 text-gray-200 font-bold text-3xl hover:text-white mr-4">
                             {item.name}
                         </a>
                     )

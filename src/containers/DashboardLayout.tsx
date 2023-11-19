@@ -33,7 +33,11 @@ const menuList: MenuListItem[] = [
         name: 'Locations'
     },
     {
+        href: '/tasks',
+        name:'Tasks'
+    },
+    {
         href: '/assurance',
         name: 'Assurance'
-    },
+    }
 ]
