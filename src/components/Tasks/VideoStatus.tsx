@@ -9,7 +9,7 @@ const VideoStatus = () => {
 
         ws.onmessage = (event:MessageEvent<string>) => {
             const data = JSON.parse(event.data) as CameraVideo[];
-            setVideoStatuses(data);  // Update the state with the latest statuses
+            setVideoStatuses(data);  // Update the state with the latest status
         };
 
         ws.onerror = (event) => {

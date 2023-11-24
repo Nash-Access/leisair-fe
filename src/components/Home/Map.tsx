@@ -61,7 +61,8 @@ const center = {
 };
 
 const MapComponent = () => {
-    const locationsFromDb = api.cameraLocations.getAll.useQuery();
+    const locationsFromDb = api.cameraLocations.getAll.useQuery()
+    console.log(locationsFromDb.data)
     return (
         <MapContainer style={containerStyle} center={center} zoom={12} scrollWheelZoom={false}>
             <TileLayer

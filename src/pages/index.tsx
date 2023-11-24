@@ -40,7 +40,7 @@ const Home = () => {
       </Head>
       <DashboardLayout sectionTitle="Home">
         <div className="h-full w-full">
-          <div className="flex justify-between gap-8">
+          <div className="flex justify-between gap-8 flex-wrap">
             <div>
               <h1 className="font-semibold text-3xl py-6">Camera Locations</h1>
               <div className="h-[600px] w-[800px]">
