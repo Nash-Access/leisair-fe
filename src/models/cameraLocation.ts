@@ -1,7 +1,9 @@
+import { ObjectId } from 'mongodb';
+
 
 export interface CameraLocation {
-    _id?: string;
+    _id?: ObjectId;
     name: string;
     latitude: number;
     longitude: number;
-    }
+}

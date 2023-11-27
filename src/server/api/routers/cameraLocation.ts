@@ -11,7 +11,7 @@ export const cameraLocationsRouter = createTRPCRouter({
         }),
 
     getAll: publicProcedure
-        .query(async ({ input }) => {
+        .query(async () => {
             return await getAllCameraLocations();
         }),
 

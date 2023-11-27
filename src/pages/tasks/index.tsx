@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import VideoStatus from '~/components/Tasks/VideoStatus';
+import VideoProcessingStatus from '~/components/Tasks/VideoStatus';
 import DashboardLayout from '~/containers/DashboardLayout';
 
 const Tasks = () => {
@@ -12,7 +12,7 @@ const Tasks = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <DashboardLayout sectionTitle="Tasks">
-            <VideoStatus/>
+                <VideoProcessingStatus />
             </DashboardLayout>
         </>
     );

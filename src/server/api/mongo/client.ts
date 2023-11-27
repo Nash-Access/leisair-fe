@@ -3,8 +3,8 @@ import { MongoClient } from 'mongodb'
 let clientPromise: Promise<MongoClient>
 let mongoClient: MongoClient
 
-const getClient = async () => {  
-    if (mongoClient){
+const getClient = async () => {
+    if (mongoClient) {
         return mongoClient
     }
 
@@ -18,14 +18,14 @@ const getClient = async () => {
         const mongo = new MongoClient(uri);
         clientPromise = mongo.connect();
         console.log("mongo promise created");
-    }    
+    }
 
     mongoClient = await clientPromise
     console.log("connected to mongo")
     return mongoClient
 }
 
-export const dashboardDb = async () => {
+export const nashDb = async () => {
     const client = await getClient()
 
     return client.db()
