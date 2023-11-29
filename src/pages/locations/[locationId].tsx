@@ -4,6 +4,9 @@ import DashboardLayout from '~/containers/DashboardLayout';
 import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
 import TableComponent, { TableHeader, TableRow } from '~/components/Table';
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css'
+
 
 const LocationView = () => {
     const router = useRouter();
@@ -11,35 +14,46 @@ const LocationView = () => {
     const cameraVideosFromDb = api.cameraVideos.getAllByLocationId.useQuery((locationId as string) || "");
     const [videoSrc, setVideoSrc] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [startDate, setStartDate] = useState<Date>(new Date(1900, 0, 1));
+    const [endDate, setEndDate] = useState<Date>(new Date());
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+
     useEffect(() => {
-        // Function to draw bounding boxes on the canvas
         const drawBoundingBoxes = () => {
             const canvas = canvasRef.current;
             const video = videoRef.current;
 
             if (canvas && video) {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+                canvas.width = video.clientWidth;
+                canvas.height = video.clientHeight;
                 const ctx = canvas.getContext('2d');
+                const scaleX = canvas.width / video.videoWidth;
+                const scaleY = canvas.height / video.videoHeight;
 
-                // Assuming the frame rate of the video is known
-                const frameRate = 15; // For example, 30 fps
+                const frameRate = 15;
                 const frameNumber = Math.floor(video.currentTime * frameRate); // Estimate frame number
                 console.log(frameNumber);
                 const detections = cameraVideosFromDb.data?.find(video => video.filename === videoSrc)?.vesselsDetected[frameNumber.toString()];
 
                 if (ctx && detections) {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous drawings
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
                     detections.forEach(detection => {
                         const { x1, y1, x2, y2 } = detection.bbox;
+
+                        const scaledX1 = x1 * scaleX;
+                        const scaledY1 = y1 * scaleY;
+                        const scaledX2 = x2 * scaleX;
+                        const scaledY2 = y2 * scaleY;
+
+
                         ctx.strokeStyle = 'red';
-                        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+                        ctx.strokeRect(scaledX1, scaledY1, scaledX2 - scaledX1, scaledY2 - scaledY1);
                         ctx.font = '18px Arial';
                         ctx.fillStyle = 'white';
-                        ctx.fillText(detection.type, x1, y1 - 10);
+                        ctx.fillText(detection.type, scaledX1, scaledY1 - 10);
+
                     });
                 }
             }
@@ -54,6 +68,8 @@ const LocationView = () => {
                 videoRef.current.removeEventListener('timeupdate', drawBoundingBoxes);
             }
         };
+
+
     }, [videoSrc, cameraVideosFromDb.data]);
 
     // Filter videos based on search term
@@ -63,13 +79,16 @@ const LocationView = () => {
 
     const headers: TableHeader[] = [
         { key: 'filename', label: 'Filename' },
-        { key: 'startTime', label: 'Start Time' },
+        { key: 'startTime', label: 'Time' },
     ];
 
     const rows = cameraVideosFromDb.data?.filter(video =>
-        video.filename.toLowerCase().includes(searchTerm.toLowerCase())
+        video.filename.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        new Date(video.startTime) >= startDate &&
+        new Date(video.startTime) <= endDate
     ).map(video => ({
         filename: video.filename,
+        startTime: new Date(video.startTime).toLocaleString(),
     })) as TableRow[];
 
     const handleRowClick = (row: TableRow) => {
@@ -86,27 +105,54 @@ const LocationView = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <DashboardLayout sectionTitle="Location View">
-                <div className="flex h-full">
-                    <div className="w-3/5 flex flex-col items-center justify-center">
+                <div className="flex h-full gap-4">
+                    <div className="w-3/5 flex flex-col items-start justify-start py-12">
+                        <h3 className="text-2xl font-bold mb-4">Video Player</h3>
                         {videoSrc && (
-                            <>
+                            <div className='relative'>
                                 <video
                                     ref={videoRef}
                                     src={`/api/videos/${encodeURIComponent(videoSrc)}`}
                                     controls
                                     className="w-full h-auto"
                                 />
-                                <canvas ref={canvasRef} className="absolute" style={{ pointerEvents: 'none' }} />
-                            </>
+                                <canvas ref={canvasRef} className="absolute top-0 left-0" style={{ pointerEvents: 'none' }} />
+                            </div>
                         )}
                     </div>
-                    <div className="w-2/5 flex flex-col items-center justify-start">
-                        <input
-                            type="text"
-                            placeholder="Search videos"
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="mb-4"
-                        />
+                    <div className="w-2/5 flex flex-col justify-start py-12">
+                        <h3 className="text-2xl font-bold mb-4">Videos</h3>
+                        <div className='flex gap-2 flex-col border-2 p-4 m-2'>
+                            <h3 className="text-xl font-bold">Filters</h3>
+                            <div className='flex gap-6 justify-start items-center '>
+
+                                <div className='flex flex-col'>
+                                    <span className="text-md py-2 text-gray-600 font-semibold">Search name</span>
+                                    <input
+                                        type="text"
+                                        placeholder="Search videos"
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="mb-4 border border-gray-300 rounded-md px-4 py-2 w-[215px]"
+                                    />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <span className="text-md py-2 text-gray-600 font-semibold">Date From</span>
+                                    <DatePicker
+                                        selected={startDate}
+                                        onChange={(date: Date) => setStartDate(date)}
+                                        className="mb-4 border border-gray-300 rounded-md px-4 py-2 w-full"
+                                    />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <span className="text-md py-2 text-gray-600 font-semibold">Date To</span>
+                                    <DatePicker
+                                        selected={endDate}
+                                        onChange={(date: Date) => setEndDate(date)}
+                                        className="mb-4 border border-gray-300 rounded-md px-4 py-2 w-full"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                         <TableComponent headers={headers} rows={rows} onRowClick={handleRowClick} />
                     </div>
                 </div>
