@@ -3,24 +3,23 @@ import { api } from '~/utils/api';
 
 const VideoProcessingStatus = () => {
     const videoStatusesFromDb = api.videoStatuses.getAll.useQuery();
-    const [lastUpdated, setLastUpdated] = useState(new Date());
+    const [lastUpdated, setLastUpdated] = useState<Date>();
 
     useEffect(() => {
-
         const interval = setInterval(() => {
-            videoStatusesFromDb.refetch();
+            void videoStatusesFromDb.refetch();
             setLastUpdated(new Date());
-        }, 2000); // Poll every 2 seconds
+        }, 4000); // Poll every 4 seconds
         return () => clearInterval(interval); // Cleanup on unmount
-    }, []);
+    }, [videoStatusesFromDb]);
 
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Video Processing Status</h1>
             <div className="mb-2 text-right">
                 <span className="text-sm text-gray-600">
-                    Last updated at: {lastUpdated.toLocaleString()}
-                </span>
+                    Last updated at: {lastUpdated?.toLocaleString()}
+                </span>                    
             </div>
             <table className="min-w-full table-auto border-collapse border border-gray-300">
                 <thead>

@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 // import MapComponent from "~/components/Home/Map";
-import TableComponent from "~/components/Table";
+import TableComponent, { TableHeader } from "~/components/Table";
 import DashboardLayout from "~/containers/DashboardLayout";
 const MapComponent = dynamic(() => import('../components/Home/Map'), {
   ssr: false
@@ -12,7 +12,11 @@ const MapComponent = dynamic(() => import('../components/Home/Map'), {
 import { api } from "~/utils/api";
 
 const Home = () => {
-  const headers = ['Location', 'Time', 'Vessel'];
+  const headers: TableHeader[] = [
+    { key: 'Location', label: 'Location' },
+    { key: 'Time', label: 'Time' },
+    { key: 'Vessel', label: 'Vessel' },
+];
   const rows = [
     {
       Location: 'Fulham',

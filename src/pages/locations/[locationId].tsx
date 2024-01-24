@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import DashboardLayout from '~/containers/DashboardLayout';
 import { api } from '~/utils/api';
 import { useRouter } from 'next/router';
-import TableComponent, { TableHeader, TableRow } from '~/components/Table';
+import TableComponent,  {type TableHeader,type TableRow } from '~/components/Table';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -13,6 +13,7 @@ const LocationView = () => {
     const { locationId } = router.query;
     const cameraVideosFromDb = api.cameraVideos.getAllByLocationId.useQuery((locationId as string) || "");
     const [videoSrc, setVideoSrc] = useState<string | null>(null);
+    const [selectedRow, setSelectedRow] = useState<number>();
     const [searchTerm, setSearchTerm] = useState('');
     const [startDate, setStartDate] = useState<Date>(new Date(1900, 0, 1));
     const [endDate, setEndDate] = useState<Date>(new Date());
@@ -73,9 +74,9 @@ const LocationView = () => {
     }, [videoSrc, cameraVideosFromDb.data]);
 
     // Filter videos based on search term
-    const filteredVideos = cameraVideosFromDb.data?.filter(video =>
-        video.filename.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // const filteredVideos = cameraVideosFromDb.data?.filter(video =>
+    //     video.filename.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
 
     const headers: TableHeader[] = [
         { key: 'filename', label: 'Filename' },
@@ -92,8 +93,9 @@ const LocationView = () => {
     })) as TableRow[];
 
     const handleRowClick = (row: TableRow) => {
-        if (row.filename) {
+        if (typeof row.filename === 'string') {
             setVideoSrc(row.filename);
+            setSelectedRow(rows.indexOf(row));
         }
     };
 
@@ -153,7 +155,9 @@ const LocationView = () => {
                                 </div>
                             </div>
                         </div>
-                        <TableComponent headers={headers} rows={rows} onRowClick={handleRowClick} />
+                        <div className="flex-1 overflow-hidden pb-12">
+                        <TableComponent headers={headers} rows={rows} onRowClick={handleRowClick} selectedRow={selectedRow}/>
+                        </div>
                     </div>
                 </div>
             </DashboardLayout>

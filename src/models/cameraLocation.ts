@@ -7,3 +7,4 @@ export interface CameraLocation {
     latitude: number;
     longitude: number;
 }
+

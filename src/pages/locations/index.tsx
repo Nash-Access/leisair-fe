@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import TableComponent, { TableHeader, TableRow } from '~/components/Table';
+import TableComponent, {type TableHeader,type TableRow } from '~/components/Table';
 import DashboardLayout from '~/containers/DashboardLayout';
 import { api } from '~/utils/api';
 
@@ -20,11 +20,11 @@ const Locations = () => {
         name: cameraLocation.name,
         latitude: cameraLocation.latitude.toFixed(6), // Example of formatting the data
         longitude: cameraLocation.longitude.toFixed(6),
-    })) || [];
+    })) ?? [];
 
     const handleRowClick = (row: TableRow) => {
         // Assuming the _id is available in the row data
-        router.push(`/locations/${row._id}`);
+        void router.push(`/locations/${(row._id as string).toString()}`);
     };
 
     return (
@@ -35,8 +35,13 @@ const Locations = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <DashboardLayout sectionTitle="Locations">
-                <TableComponent headers={cameraLocationTableHeaders} rows={cameraLocationTableRows} onRowClick={handleRowClick} />
-            </DashboardLayout>
+    <div className="flex flex-col h-full">
+        {/* Other content here */}
+        <div className="flex-1 overflow-hidden"> {/* This div should flexibly fill space */}
+            <TableComponent headers={cameraLocationTableHeaders} rows={cameraLocationTableRows} onRowClick={handleRowClick} />
+        </div>
+    </div>
+</DashboardLayout>
         </>
     );
 };

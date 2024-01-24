@@ -1,5 +1,5 @@
-import { CameraLocation } from "~/models/cameraLocation";
-import { BSON, Collection, Db, ObjectId } from "mongodb";
+import type { CameraLocation } from "~/models/cameraLocation";
+import { type Collection, type Db, ObjectId } from "mongodb";
 import { nashDb } from "../client"
 
 let databasePromise: Promise<Db>

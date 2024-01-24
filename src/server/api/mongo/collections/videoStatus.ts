@@ -1,5 +1,5 @@
-import { VideoStatus } from "~/models/videoStatus";
-import { BSON, Collection, Db, ObjectId } from "mongodb";
+import type { VideoStatus } from "~/models/videoStatus";
+import type { Collection, Db } from "mongodb";
 import { nashDb } from "../client"
 
 let databasePromise: Promise<Db>

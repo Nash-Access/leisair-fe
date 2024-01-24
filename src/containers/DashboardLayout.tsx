@@ -6,16 +6,28 @@ interface DashboardLayoutProps {
     children: ReactNode;
 }
 
+// const DashboardLayout = ({ children, sectionTitle }: DashboardLayoutProps) => {
+//     return (
+//         <div className="h-screen w-screen">
+//             <Menu menuList={menuList} />
+//             <div className="h-full w-full p-8">
+//                 <h1 className="font-bold text-5xl py-6">{sectionTitle}</h1>
+
+//                 {children}
+//             </div>
+
+//         </div>
+//     );
+// }
+
 const DashboardLayout = ({ children, sectionTitle }: DashboardLayoutProps) => {
     return (
-        <div className="h-screen w-screen">
+        <div className="flex flex-col h-screen overflow-hidden">
             <Menu menuList={menuList} />
-            <div className="h-full w-full p-8">
+            <div className="flex-1 overflow-hidden p-8"> {/* This is the main content area */}
                 <h1 className="font-bold text-5xl py-6">{sectionTitle}</h1>
-
-                {children}
+                {children} {/* Should flexibly fill remaining space */}
             </div>
-
         </div>
     );
 }
@@ -39,5 +51,9 @@ const menuList: MenuListItem[] = [
     {
         href: '/assurance',
         name: 'Assurance'
+    },
+    {
+        href: '/analytics',
+        name: 'Analytics'
     }
 ]

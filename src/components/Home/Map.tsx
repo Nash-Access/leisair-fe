@@ -71,10 +71,10 @@ const MapComponent = () => {
             />
 
             {locationsFromDb.data?.map((location) => (
-                <Marker key={location._id} icon={svgIcon} position={[location.latitude, location.longitude]}>
+                <Marker key={location._id.toString()} icon={svgIcon} position={[location.latitude, location.longitude]}>
                     <Popup>
                         Name: {location.name}
-                        <button onClick={() => Router.push(`/locations/${location._id}`)}>
+                        <button onClick={() => Router.push(`/locations/${location._id.toString()}`)}>
                             View
                         </button>
                     </Popup>
