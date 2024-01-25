@@ -14,6 +14,9 @@ RUN npm run build
 FROM node:20-alpine3.18 AS runner
 WORKDIR /app
 
+# Install FFmpeg
+RUN apk add --no-cache ffmpeg
+
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV PORT 3000
