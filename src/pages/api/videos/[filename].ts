@@ -9,7 +9,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(400).json({ error: 'Invalid request' });
     }
 
-    const filePath = path.resolve(`${process.env.VIDEO_PATH || "C:/Users/ayman/OneDrive - Brunel University London/PhD/NASH Project/code/LeisAIR-ml/data"}/${filename}.mp4`);
+    const filePath = path.resolve(`${process.env.VIDEO_PATH ?? "C:/Users/ayman/OneDrive - Brunel University London/PhD/NASH Project/code/LeisAIR-ml/data"}/${filename}.mp4`);
 
     fs.stat(filePath, (err, stat) => {
         if (err) {
