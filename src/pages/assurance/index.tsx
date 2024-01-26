@@ -81,7 +81,6 @@ const Assurance = () => {
     }, [vesselCorrectionsFromDb.data, cameraFramesFromDb.data]);
 
     useEffect(() => {
-        console.log("ROWS HAVE CHANGED", selectedRow);
         if (selectedRow !== undefined && rows.length > 0) {
             void handleRowClick(rows[selectedRow]?.frame ?? 0,rows[selectedRow]?.filename ?? "",selectedRow)
         }
@@ -98,8 +97,6 @@ const Assurance = () => {
 
 
     const handleRowClick = async (rowFrame: number, rowFilename:string, index: number) => {
-        console.log("row from click: ");
-        // console.log("row from function: ", rows);
         setSelectedDetection(rows[index]);
         setSelectedRow(index);
         const response = await fetch(`/api/videos/frames/${rowFrame}?filename=${rowFilename}`);

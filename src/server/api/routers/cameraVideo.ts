@@ -22,9 +22,6 @@ export const cameraVideoRouter = createTRPCRouter({
     getAllLowConfidenceDetections: publicProcedure
         .input(z.number())
         .query(async ({ input }) => {
-            const p = await getLowConfidenceDetections(input);
-            console.log(p);
             return await getLowConfidenceDetections(input);
         }),
-
 });

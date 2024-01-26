@@ -88,7 +88,5 @@ export const getLowConfidenceDetections = async (confidenceThreshold: number): P
     ];
 
     const cursor = collection.aggregate(pipeline);
-    // const data = await cursor.toArray()
-    // // console.log(data)
     return cursor.toArray() as Promise<LowConfidenceFramesProjection[]>;
 };

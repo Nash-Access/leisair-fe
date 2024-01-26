@@ -7,7 +7,6 @@ import { api } from '~/utils/api';
 const Locations = () => {
     const router = useRouter();
     const cameraLocationsFromDb = api.cameraLocations.getAll.useQuery();
-    console.log(cameraLocationsFromDb.data);
 
     const cameraLocationTableHeaders: TableHeader[] = [
         { key: 'name', label: 'Name' },
