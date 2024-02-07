@@ -20,19 +20,19 @@ jobs:
           npm install
           npm run lint
 
-      # Get previous tag
-      - name: Get previous tag
-        id: previoustag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # # Get previous tag
+      # - name: Get previous tag
+      #   id: previoustag
+      #   uses: WyriHaximus/github-action-get-previous-tag@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Calculate next semantic version
-      - name: Get next semantic version
-        id: semver
-        uses: WyriHaximus/github-action-next-semvers@v1
-        with:
-          version: ${{ steps.previoustag.outputs.tag }}
+      # # Calculate next semantic version
+      # - name: Get next semantic version
+      #   id: semver
+      #   uses: WyriHaximus/github-action-next-semvers@v1
+      #   with:
+      #     version: ${{ steps.previoustag.outputs.tag }}
 
       # Set up QEMU
       - name: Set up QEMU
@@ -56,15 +56,15 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/ayyman-e/leisair-nextjs:${{ steps.semver.outputs.patch }}
-            ghcr.io/ayyman-e/leisair-nextjs:latest
+            ghcr.io/ayyman-e/leisair-nextjs:0.1.0
+          build-args: VERSION="0.1.0"
 
-      # Optionally, create a GitHub release for the new version
-      - name: Create GitHub Release
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.semver.outputs.patch }}
-          release_name: Release ${{ steps.semver.outputs.patch }}
+      # # Optionally, create a GitHub release for the new version
+      # - name: Create GitHub Release
+      #   if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ steps.semver.outputs.patch }}
+      #     release_name: Release ${{ steps.semver.outputs.patch }}
