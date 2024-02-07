@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Necessary for tags fetching
 
       # Linting step
       - name: Lint
@@ -18,14 +20,28 @@ jobs:
           npm install
           npm run lint
 
+      # Get previous tag
+      - name: Get previous tag
+        id: previoustag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Calculate next semantic version
+      - name: Get next semantic version
+        id: semver
+        uses: WyriHaximus/github-action-next-semvers@v1
+        with:
+          version: ${{ steps.previoustag.outputs.tag }}
+
       # Set up QEMU
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-      
+
       # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       # Login to GitHub Container Registry
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -34,9 +50,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
 
-      # Docker build and push
+      # Docker build and push with semantic versioning
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/ayyman-e/leisair-nextjs:latest
+          tags: |
+            ghcr.io/ayyman-e/leisair-nextjs:${{ steps.semver.outputs.patch }}
+            ghcr.io/ayyman-e/leisair-nextjs:latest
+
+      # Optionally, create a GitHub release for the new version
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.semver.outputs.patch }}
+          release_name: Release ${{ steps.semver.outputs.patch }}

@@ -1,10 +1,10 @@
 import Head from 'next/head';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { type ChangeEvent, useEffect, useRef, useState } from 'react';
 import DashboardLayout from '~/containers/DashboardLayout';
 import { api } from '~/utils/api';
-import TableComponent, { TableHeader } from '~/components/Table';
-import { LowConfidenceFramesProjection, VesselType, vesselTypes } from '~/models/cameraVideo';
-import { VesselCorrection } from '~/models/vesselCorrections';
+import TableComponent, { type TableHeader } from '~/components/Table';
+import { type LowConfidenceFramesProjection, type VesselType, vesselTypes } from '~/models/cameraVideo';
+import {type VesselCorrection } from '~/models/vesselCorrections';
 import { toast } from 'react-toastify';
 import clsx from 'clsx';
 import useDebouncedCallback from '~/utils/hooks';
@@ -32,10 +32,10 @@ const Assurance = () => {
     const [rows, setRows] = useState<LowConfidenceFramesProjection[]>([]);
     const [imageSrc, setImageSrc] = useState('');
     const [disableButtons, setDisableButtons] = useState<boolean>(true);
-    
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
-    
+
     const debouncedSetConfidenceThreshold = useDebouncedCallback((newThreshold: number) => {
         setConfidenceThresholdForDb(newThreshold);
     }, 1000)
@@ -82,7 +82,7 @@ const Assurance = () => {
 
     useEffect(() => {
         if (selectedRow !== undefined && rows.length > 0) {
-            void handleRowClick(rows[selectedRow]?.frame ?? 0,rows[selectedRow]?.filename ?? "",selectedRow)
+            void handleRowClick(rows[selectedRow]?.frame ?? 0, rows[selectedRow]?.filename ?? "", selectedRow)
         }
     }, [rows]);
 
@@ -96,7 +96,7 @@ const Assurance = () => {
     ];
 
 
-    const handleRowClick = async (rowFrame: number, rowFilename:string, index: number) => {
+    const handleRowClick = async (rowFrame: number, rowFilename: string, index: number) => {
         setSelectedDetection(rows[index]);
         setSelectedRow(index);
         const response = await fetch(`/api/videos/frames/${rowFrame}?filename=${rowFilename}`);
@@ -193,7 +193,8 @@ const Assurance = () => {
                                                 })) as AssuranceTableRow[]} onRowClick={(row, index) => {
                                                     const rowFrame = row.frame ?? 0;
                                                     const rowFilename = row.filename ?? "";
-                                                    void handleRowClick(rowFrame, rowFilename, index)}} selectedRow={selectedRow} />
+                                                    void handleRowClick(rowFrame, rowFilename, index)
+                                                }} selectedRow={selectedRow} />
                                         </div>
                                     </div>
                                 </div>

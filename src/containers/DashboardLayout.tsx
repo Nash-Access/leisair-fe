@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import {type ReactNode } from "react";
 import Menu, {type MenuListItem } from "~/containers/Menu";
 
 interface DashboardLayoutProps {
@@ -25,6 +25,10 @@ const menuList: MenuListItem[] = [
     {
         href: '/',
         name: 'Home'
+    },
+    {
+        href: '/upload-videos',
+        name: 'Upload Videos'
     },
     {
         href: '/locations',

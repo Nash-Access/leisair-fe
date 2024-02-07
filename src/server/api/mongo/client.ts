@@ -1,10 +1,10 @@
 import { MongoClient } from 'mongodb'
 
-let clientPromise: Promise<MongoClient>
+let clientPromise: Promise<MongoClient> | undefined
 let mongoClient: MongoClient
 
-const getClient = async () => {
-    if (mongoClient) {
+const getClient = async () => {  
+    if (mongoClient){
         return mongoClient
     }
 
@@ -13,11 +13,11 @@ const getClient = async () => {
         throw new Error('Add Mongo URI to .env.local')
     }
 
-    if (!clientPromise) {
-        console.log("connecting to mongo");
-        const mongo = new MongoClient(uri);
-        clientPromise = mongo.connect();
-        console.log("mongo promise created");
+    if (!clientPromise){
+        console.log("connecting to mongo")
+        const mongo = new MongoClient(uri)
+        clientPromise = mongo.connect()
+        console.log("mongo promise created")
     }
 
     mongoClient = await clientPromise

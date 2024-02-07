@@ -73,7 +73,7 @@ const MapComponent = () => {
                 <Marker key={location._id.toString()} icon={svgIcon} position={[location.latitude, location.longitude]}>
                     <Popup>
                         Name: {location.name}
-                        <button onClick={() => Router.push(`/locations/${location._id.toString()}`)}>
+                        <button onClick={() => void Router.push(`/locations/${location._id.toString()}`)}>
                             View
                         </button>
                     </Popup>
