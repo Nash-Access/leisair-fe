@@ -14,7 +14,7 @@ const config = {
     return [
       {
         source: "/upload",
-        destination: `${process.env.BACKEND_API_URL}/upload`,
+        destination: `${process.env.BACKEND_API_URL ?? "http://fastapi:8000"}/upload`,
       },
     ];
   },
