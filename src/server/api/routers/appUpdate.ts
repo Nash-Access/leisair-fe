@@ -6,7 +6,7 @@ import { UpdateInfoResponse } from "~/models/appUpdate";
 export const appUpdateRouter = createTRPCRouter({
   checkForUpdate: publicProcedure
   .mutation(async () => {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_FASTAPI_URL ?? "http://localhost:8000"}/check-updates`, {
+    const response = await axios.post(`${process.env.BACKEND_API_URL ?? "http://localhost:8000"}/check-updates`, {
       current_nextjs_version: process.env.LEISAIR_NEXTJS_VERSION ?? "latest",
     });
     return response.data as UpdateInfoResponse;
@@ -16,7 +16,7 @@ export const appUpdateRouter = createTRPCRouter({
     services: z.record(z.string()),
   }))
   .mutation(async ({ input }) => {
-    return await axios.post(`${process.env.NEXT_PUBLIC_FASTAPI_URL ?? "http://localhost:8000"}/initiate-update`, {
+    return await axios.post(`${process.env.BACKEND_API_URL ?? "http://localhost:8000"}/initiate-update`, {
       services: input?.services || {}, 
     })
   }),

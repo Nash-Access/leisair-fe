@@ -8,6 +8,12 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    GOOGLE_MAPS_API_KEY: z.string(),
+    MONGODB_URI: z.string(),
+    FFMPEG_PATH: z.string(),
+    VIDEO_PATH: z.string(),
+    BACKEND_API_URL: z.string(),
+
   },
 
   /**
@@ -25,6 +31,11 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
+    MONGODB_URI: process.env.MONGODB_URI,
+    FFMPEG_PATH: process.env.FFMPEG_PATH,
+    VIDEO_PATH: process.env.VIDEO_PATH,
+    BACKEND_API_URL: process.env.BACKEND_API_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
