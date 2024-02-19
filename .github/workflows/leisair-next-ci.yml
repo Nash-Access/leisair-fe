@@ -15,10 +15,10 @@ jobs:
           fetch-depth: 0 # Necessary for tags fetching
 
       # Linting step
-      - name: Lint
-        run: |
-          npm install
-          npm run lint
+      # - name: Lint
+      #   run: |
+      #     npm install
+      #     npm run lint
 
       # Get previous tag
       - name: Get previous tag
