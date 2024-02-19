@@ -26,7 +26,7 @@ const FileUpload = () => {
         formData.append('file', fileWithProgress.file);
     
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/upload`, formData, {
+            await axios.post("/upload", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
