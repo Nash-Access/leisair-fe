@@ -10,9 +10,9 @@ const DashboardLayout = ({ children, sectionTitle }: DashboardLayoutProps) => {
     return (
         <div className="flex flex-col h-screen overflow-hidden">
             <Menu menuList={menuList} />
-            <div className="flex-1 overflow-hidden p-8"> {/* This is the main content area */}
+            <div className="flex-1 overflow-hidden p-8">
                 <h1 className="font-bold text-5xl py-6">{sectionTitle}</h1>
-                {children} {/* Should flexibly fill remaining space */}
+                {children}
             </div>
         </div>
     );
@@ -27,23 +27,11 @@ const menuList: MenuListItem[] = [
         name: 'Home'
     },
     {
-        href: '/upload-videos',
-        name: 'Upload Videos'
-    },
-    {
-        href: '/locations',
-        name: 'Locations'
-    },
-    {
-        href: '/tasks',
-        name:'Tasks'
+        href: '/video-processing',
+        name: 'Video Processing'
     },
     {
         href: '/assurance',
         name: 'Assurance'
     },
-    {
-        href: '/analytics',
-        name: 'Analytics'
-    }
 ]

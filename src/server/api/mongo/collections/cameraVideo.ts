@@ -36,65 +36,6 @@ export const getAllCameraVideos = async () => {
     return await collection.find().toArray()
 }
 
-// export const getCameraVideosForExport = async (
-//     locationIds: string[],
-//     startDate: Date,
-//     endDate: Date,
-//     confidenceThreshold: number
-// ) => {
-//     const collection = await getCollection();
-
-//     const query = {
-//         locationId: { $in: locationIds },
-//         "startTime": {
-//             $gte: startDate,
-//             $lte: endDate
-//         }
-//     };
-
-//     const pipeline = [
-//         { $match: query },
-//         {
-//             $project: {
-//                 locationId: 1,
-//                 filename: 1,
-//                 startTime: 1,
-//                 vesselsDetected: { $objectToArray: "$vesselsDetected" }
-//             }
-//         },
-//         { $unwind: "$vesselsDetected" },
-//         { $unwind: "$vesselsDetected.v" },
-//         { $match: { "vesselsDetected.v.confidence": { $gte: confidenceThreshold } } },
-//         {
-//             $group: {
-//                 _id: "$_id",
-//                 locationId: { $first: "$locationId" },
-//                 filename: { $first: "$filename" },
-//                 startTime: { $first: "$startTime" },
-//                 uniqueVessels: { $addToSet: "$vesselsDetected.v.type" } // Collecting unique vessel types
-//             }
-//         },
-//         {
-//             $project: {
-//                 _id: 0,
-//                 locationId: 1,
-//                 filename: 1,
-//                 startTime: 1,
-//                 totalUniqueVesselsDetected: { $size: "$uniqueVessels" }, // Counting the number of unique types
-//                 vesselTypes: { $reduce: {
-//                     input: "$uniqueVessels",
-//                     initialValue: "",
-//                     in: { $concat: [ "$$value", { $cond: { if: { $eq: [ "$$value", "" ] }, then: "", else: ", " } }, "$$this" ] }
-//                 }}
-//             }
-//         },
-
-//     ];
-
-//     const results = await collection.aggregate(pipeline).toArray();
-//     return results;
-// };
-
 export const getCameraVideosForExport = async (
     locationIds: string[],
     startDate: Date,

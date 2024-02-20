@@ -14,17 +14,15 @@ const VideoProcessingStatus = () => {
     }, [videoStatusesFromDb]);
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Video Processing Status</h1>
-            <div className="mb-2 text-right">
+        <div className="relative w-full">
+            <div className="mb-2 text-right absolute -top-7 right-0">
                 <span className="text-sm text-gray-600">
                     Last updated at: {lastUpdated?.toLocaleString()}
                 </span>                    
             </div>
-            <table className="min-w-full table-auto border-collapse border border-gray-300">
+            <table className="w-full table-auto border-collapse border border-gray-300 overflow-x-auto max-h-[calc(100vh-500px)]">
                 <thead>
                     <tr className="bg-gray-100">
-                        <th className="border border-gray-300 px-4 py-2 text-left">ID</th>
                         <th className="border border-gray-300 px-4 py-2 text-left">Filename</th>
                         <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
                         <th className="border border-gray-300 px-4 py-2 text-left">Progress</th>
@@ -35,7 +33,6 @@ const VideoProcessingStatus = () => {
                 <tbody>
                     {videoStatusesFromDb.data?.map((video, index) => (
                         <tr key={index}>
-                            <td className="border border-gray-300 px-4 py-2">{video._id}</td>
                             <td className="border border-gray-300 px-4 py-2">{video.filename}</td>
                             <td className="border border-gray-300 px-4 py-2">{video.status}</td>
                             <td className="border border-gray-300 px-4 py-2">
