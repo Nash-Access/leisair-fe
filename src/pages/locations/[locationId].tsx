@@ -20,6 +20,8 @@ const LocationView = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    console.log(cameraVideosFromDb.data);
+
 
     useEffect(() => {
         const drawBoundingBoxes = () => {
@@ -35,7 +37,6 @@ const LocationView = () => {
 
                 const frameRate = 15;
                 const frameNumber = Math.floor(video.currentTime * frameRate); // Estimate frame number
-                console.log(frameNumber);
                 const detections = cameraVideosFromDb.data?.find(video => video.filename === videoSrc)?.vesselsDetected[frameNumber.toString()];
 
                 if (ctx && detections) {
@@ -53,7 +54,7 @@ const LocationView = () => {
                         ctx.strokeRect(scaledX1, scaledY1, scaledX2 - scaledX1, scaledY2 - scaledY1);
                         ctx.font = '18px Arial';
                         ctx.fillStyle = 'white';
-                        ctx.fillText(detection.type, scaledX1, scaledY1 - 10);
+                        ctx.fillText(`${detection.type} - #${detection.vesselId}`, scaledX1, scaledY1 - 10);
 
                     });
                 }
@@ -72,11 +73,6 @@ const LocationView = () => {
 
 
     }, [videoSrc, cameraVideosFromDb.data]);
-
-    // Filter videos based on search term
-    // const filteredVideos = cameraVideosFromDb.data?.filter(video =>
-    //     video.filename.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
 
     const headers: TableHeader[] = [
         { key: 'filename', label: 'Filename' },

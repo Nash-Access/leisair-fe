@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { CameraFilters } from '~/models/cameraVideo';
 import { getAllCameraLocations } from '~/server/api/mongo/collections/cameraLocations';
-import { getCameraVideos } from '~/server/api/mongo/collections/cameraVideo';
+import { getCameraVideosForExport } from '~/server/api/mongo/collections/cameraVideo';
 import { jsonToCSV } from '~/utils/csvHelpers';
 
 interface Query {
@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const locationMap = new Map(locations.map(location => [location._id.toString(), location.name]));
 
-    const data = await getCameraVideos(
+    const data = await getCameraVideosForExport(
         locationIdsArray,
         new Date(startDate),
         new Date(endDate),

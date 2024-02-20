@@ -16,6 +16,7 @@ export interface CameraVideo {
 }
 
 export interface VesselDetected {
+    vesselId: string;
     type: VesselType,
     confidence: number,
     speed?: number,
