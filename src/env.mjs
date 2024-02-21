@@ -10,7 +10,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]),
     GOOGLE_MAPS_API_KEY: z.string(),
     MONGODB_URI: z.string(),
-    FFMPEG_PATH: z.string(),
+    FFMPEG_PATH: z.optional(z.string()),
     VIDEO_PATH: z.string(),
     BACKEND_API_URL: z.string(),
 
