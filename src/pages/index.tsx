@@ -248,7 +248,7 @@ const LocationView = () => {
                     </div>
                   </div>
                 </div>
-                <ExportDataButton filters={{ locationIds: selectedLocationIdsVideoFilter, startDate, endDate }} />
+                <ExportDataButton filters={{ locationIds: selectedLocationIds, startDate, endDate }} />
               </div>
 
           </div>

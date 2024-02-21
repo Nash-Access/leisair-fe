@@ -46,6 +46,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     })
 
+    console.log('formattedData', formattedData);
+
 
     const csv = jsonToCSV(formattedData);
 

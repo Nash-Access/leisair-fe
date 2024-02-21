@@ -1,5 +1,3 @@
-// UploadVideoPage.js
-import React, { useState } from 'react';
 import Head from 'next/head';
 import DashboardLayout from '~/containers/DashboardLayout';
 import FileUpload from '~/components/FileDrop/FileUpload';
