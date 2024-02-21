@@ -117,8 +117,8 @@ const LocationView = () => {
   };
 
   const handleLocationChange = (locationId: string) => {
-    const currentIndex = selectedLocationIdsVideoFilter.indexOf(locationId);
-    const newSelectedLocationIds: string[] = [...selectedLocationIdsVideoFilter];
+    const currentIndex = selectedLocationIds.indexOf(locationId);
+    const newSelectedLocationIds: string[] = [...selectedLocationIds];
 
     if (currentIndex === -1) {
       newSelectedLocationIds.push(locationId);
