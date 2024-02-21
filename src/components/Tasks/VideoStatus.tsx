@@ -9,7 +9,7 @@ const VideoProcessingStatus = () => {
         const interval = setInterval(() => {
             void videoStatusesFromDb.refetch();
             setLastUpdated(new Date());
-        }, 4000); // Poll every 4 seconds
+        }, 1000); // Poll every 4 seconds
         return () => clearInterval(interval); // Cleanup on unmount
     }, [videoStatusesFromDb]);
 
@@ -20,8 +20,9 @@ const VideoProcessingStatus = () => {
                     Last updated at: {lastUpdated?.toLocaleString()}
                 </span>                    
             </div>
-            <table className="w-full table-auto border-collapse border border-gray-300 overflow-x-auto max-h-[calc(100vh-500px)]">
-                <thead>
+            <div className="w-full text-left border-collapse overflow-x-auto max-h-[calc(100vh-350px)] bg-white relative">
+            <table className="w-full h-full text-left border-collapse sticky">
+                <thead className=''>
                     <tr className="bg-gray-100">
                         <th className="border border-gray-300 px-4 py-2 text-left">Filename</th>
                         <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
@@ -48,6 +49,7 @@ const VideoProcessingStatus = () => {
                     ))}
                 </tbody>
             </table>
+            </div>
         </div>
     );
 };
