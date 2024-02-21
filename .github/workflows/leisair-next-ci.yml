@@ -13,9 +13,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Necessary for tags fetching
-      - name: Lowercase repository owner
-        id: lowercase_repo_owner
-        run: echo "lowercase_owner=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       # Linting step
       # - name: Lint
@@ -59,8 +56,8 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/${{ env.lowercase_owner }}/leisair-fe:${{ steps.semver.outputs.patch }}
-            ghcr.io/${{ env.lowercase_owner }}/leisair-fe:latest
+            ghcr.io/${{ github.repository_owner }}/leisair-fe:${{ steps.semver.outputs.patch }}
+            ghcr.io/${{ github.repository_owner }}/leisair-fe:latest
           build-args: VERSION=${{ steps.semver.outputs.patch }}
 
       # Optionally, create a GitHub release for the new version
