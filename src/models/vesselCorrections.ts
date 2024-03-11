@@ -10,6 +10,7 @@ export interface VesselCorrection {
     speed: number;
     direction: string;
     image: string;
+    used: boolean;
     bbox: {
         x1: number;
         y1: number;

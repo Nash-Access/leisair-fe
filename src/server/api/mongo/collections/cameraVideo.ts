@@ -23,7 +23,7 @@ const getCollection = async () => {
 
 export const getOneCameraVideo = async (id: ObjectId) => {
     const collection = await getCollection()
-    return await collection.findOne<CameraVideo>({ _id: id })
+    return await collection.findOne<CameraVideo>({ _id: new ObjectId(id) })
 }
 
 export const getCameraVideosByLocationId = async (locationId: string) => {
@@ -34,6 +34,16 @@ export const getCameraVideosByLocationId = async (locationId: string) => {
 export const getAllCameraVideos = async () => {
     const collection = await getCollection()
     return await collection.find().toArray()
+}
+
+export const getAllCameraVideosWithoutFramesProjection = async () => {
+    const collection = await getCollection()
+    return await collection.find().project({ vesselsDetected: 0 }).toArray() as CameraVideo[]
+}
+
+export const deleteAllCameraVideos = async () => {
+    const collection = await getCollection()
+    return await collection.deleteMany({})
 }
 
 export const getCameraVideosForExport = async (
@@ -164,12 +174,14 @@ export const getLowConfidenceDetections = async (confidenceThreshold: number): P
                 startTime: 1,
                 frame: "$detectionsArray.k",
                 type: "$detectionsArray.v.type",
+                vesselId: "$detectionsArray.v.vesselId",
                 confidence: "$detectionsArray.v.confidence",
                 bbox: "$detectionsArray.v.bbox",
                 speed: "$detectionsArray.v.speed",
                 direction: "$detectionsArray.v.direction",
             }
-        }
+        },
+        {$limit: 100}
     ];
 
     const cursor = collection.aggregate(pipeline);

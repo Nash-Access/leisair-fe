@@ -1,6 +1,6 @@
 import {type ObjectId } from "mongodb";
 
-export const vesselTypes =  ['Kayak or Canoe', 'Narrow Boat','RIB - General','RIB - Pleasure','RIB - RNLI', 'RIB - Tours','Rowing - 4','Rowing - 8','single scull', 'double scull', 'rowboat other', 'SUP', 'Sailing Dinghy', 'Service - Port Tender or Police', 'Service - Tug','Service - Tug Towing','Service - Tug Pushing','Service - General','Service - Bunker Barge', 'Small Powered - General', 'dayboat',   'pleasure cruiser', 'Service - Workboat',  'patrol vessel', 'Small Powered - Pleasure Boat', 'Small Powered - Tender', 'Yacht - Not Under Sail',   'Yacht - Under Sail','Class V Passenger', 'Uber Boat','Tall Ship','Large Shipping - General','Large Shipping - Cargo','Large Shipping - Dredger','Large Shipping - Warship', 'Not Vessel'] as const
+export const vesselTypes =  ['SUP', 'Kayak Or Canoe', 'Rowing Boat', 'Yacht', 'Sailing Dinghy', 'Narrow Boat', 'Uber Boat', ' Class V Passenger', 'RIB', 'RNLI', 'Pleasure Boat', 'Small Powered', 'Workboat', 'Tug', 'Tug - Towing', 'Tug - Pushing', 'Large Shipping', 'Fire', 'Police', 'Not Vessel'] as const
 export const vesselDirections = ['East', 'West', 'North', 'South', 'North East', 'North West', 'South East', 'South West'] as const
 
 export type VesselType = (typeof vesselTypes)[number]
@@ -35,6 +35,7 @@ export interface LowConfidenceFramesProjection {
     startTime: Date;
     frame: number;
     type: string;
+    vesselId: string;
     confidence: number;
     speed: number;
     bbox: {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { api } from '~/utils/api';
 import { newNanoId } from '~/utils/ids';
 
 
@@ -16,6 +17,8 @@ interface FileWithProgress {
 const FileUpload = () => {
     const [files, setFiles] = useState<FileWithProgress[]>([])
     const isUploading = files.some(file => file.progress < 100);
+    const mlModelsFromDb = api.mlModels.getAll.useQuery()
+    const isModelTraining = mlModelsFromDb.data?.some((model) => model.status === "training");
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         const filesWithProgress = acceptedFiles.map(file => ({
@@ -61,6 +64,7 @@ const FileUpload = () => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: { 'video/mp4': ['.mp4', '.MP4'] },
+        disabled: isUploading || isModelTraining
     });
 
     const formatBytes = (bytes: number, decimals = 2) => {
@@ -73,7 +77,8 @@ const FileUpload = () => {
     };
     return (
         <>
-            <div {...getRootProps()} className={`border-2 border-dashed p-4 cursor-pointer text-center mb-4 transition-all duration-300 hover:border-blue-500 hover:animate-pulse ${isDragActive ? 'border-blue-500 animate-pulse' : 'border-gray-300'}`}>
+        {isModelTraining && (<> <div className=" p-4 mb-4 text-center text-red-500 font-bold">Model training in progress, please wait for it to complete before uploading more files</div></>)}
+            <div {...getRootProps()} className={clsx(`border-2 border-dashed p-4 cursor-pointer text-center mb-4 transition-all duration-300  ${isDragActive ? 'border-blue-500 animate-pulse' : 'border-gray-300'}`, isModelTraining ? "bg-gray-300 cursor-not-allowed" : "hover:border-blue-500 hover:animate-pulse")}>
                 <input {...getInputProps()} />
                 <div className="flex flex-col items-center justify-center">
                     {isDragActive ? (
@@ -114,7 +119,7 @@ const FileUpload = () => {
                                     <td className="p-2 border-b">{fileWithProgress.status}</td>
                                     <td className="p-2 border-b">
                                         <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-                                            <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: `${fileWithProgress.progress}%` }}> {fileWithProgress.progress}% </div>
+                                            <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center py-0.5 leading-none rounded-full" style={{ width: `${fileWithProgress.progress}%` }}> {fileWithProgress.progress}% </div>
                                         </div>
                                     </td>
                                     <td className="p-2 border-b">

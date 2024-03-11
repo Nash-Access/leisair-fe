@@ -6,6 +6,7 @@ import TableComponent, { type TableHeader, type TableRow } from '~/components/Ta
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 import ExportDataButton from '~/components/Home/DataExtractionButton';
+import { ObjectId } from 'mongodb';
 
 
 const LocationView = () => {
@@ -13,6 +14,8 @@ const LocationView = () => {
   const locationsFromDb = api.cameraLocations.getAll.useQuery();
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<number>();
+  const [selectedVideo, setSelectedVideo] = useState<ObjectId>();
+  const selectedVideoFromDb = api.cameraVideos.getOne.useQuery(selectedVideo, { enabled: !!selectedVideo });
 
   const [searchTermVideoFilter, setSearchTermVideoFilter] = useState('');
   const [startDateVideoFilter, setStartDateVideoFilter] = useState<Date>(new Date(1900, 0, 1));
@@ -25,8 +28,6 @@ const LocationView = () => {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  console.log(cameraVideosFromDb.data);
 
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const LocationView = () => {
 
         const frameRate = 15;
         const frameNumber = Math.floor(video.currentTime * frameRate); // Estimate frame number
-        const detections = cameraVideosFromDb.data?.find(video => video.filename === videoSrc)?.vesselsDetected[frameNumber.toString()];
+        const detections = selectedVideoFromDb.data?.vesselsDetected[frameNumber.toString()];
 
         if (ctx && detections) {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -78,7 +79,7 @@ const LocationView = () => {
     };
 
 
-  }, [videoSrc, cameraVideosFromDb.data]);
+  }, [videoSrc, selectedVideoFromDb.data]);
 
   const headers: TableHeader[] = [
     { key: 'filename', label: 'Filename' },
@@ -86,7 +87,6 @@ const LocationView = () => {
   ];
 
   const rows = cameraVideosFromDb.data?.filter(video =>
-    Object.entries(video.vesselsDetected).length > 0 &&
     selectedLocationIdsVideoFilter.length === 0 || selectedLocationIdsVideoFilter.includes(video.locationId) &&
     video.filename.toLowerCase().includes(searchTermVideoFilter.toLowerCase()) &&
     new Date(video.startTime) >= startDateVideoFilter &&
@@ -100,6 +100,7 @@ const LocationView = () => {
     if (typeof row.filename === 'string') {
       setVideoSrc(row.filename);
       setSelectedRow(rows.indexOf(row));
+      setSelectedVideo(cameraVideosFromDb.data?.find(video => video.filename === row.filename)?._id);
     }
   };
 

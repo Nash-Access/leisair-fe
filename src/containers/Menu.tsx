@@ -13,6 +13,8 @@ const Menu = ({ menuList }: MenuProps) => {
     const [updateInfo, setUpdateInfo] = useState<UpdateInfoResponse | undefined>();
     const checkForUpdate = api.appUpdate.checkForUpdate.useMutation()
     const updateApplication = api.appUpdate.update.useMutation()
+    const clearVideos = api.cameraVideos.deleteAll.useMutation()
+
 
     const handleCheckForUpdates = async () => {
         const res = await checkForUpdate.mutateAsync()
@@ -20,6 +22,10 @@ const Menu = ({ menuList }: MenuProps) => {
             setUpdateInfo(res);
         }
     };
+
+    const handleClearVideos = async () => {
+        await clearVideos.mutateAsync()
+    }
 
     const handleInitiateUpdate = async () => {
         if (updateInfo) {
@@ -68,6 +74,10 @@ const Menu = ({ menuList }: MenuProps) => {
                 )}
                 <button onClick={() => {void handleCheckForUpdates()}} className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-blue-900 hover:bg-white mt-4 lg:mt-0">
                     Check for Updates
+                </button>
+
+                <button onClick={() => {void handleClearVideos()}} className="inline-block px-5 py-3 leading-none rounded bg-red-500 text-white font-bold border-white hover:border-transparent hover:text-blue-900 hover:bg-white mt-4 lg:mt-0">
+                    Clear Videos
                 </button>
             </div>
         </nav>

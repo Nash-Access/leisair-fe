@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { getAllCameraVideos, getCameraVideosByLocationId, getLowConfidenceDetections, getOneCameraVideo } from "../mongo/collections/cameraVideo";
+import { deleteAllCameraVideos, getAllCameraVideos, getAllCameraVideosWithoutFramesProjection, getCameraVideosByLocationId, getLowConfidenceDetections, getOneCameraVideo } from "../mongo/collections/cameraVideo";
+import { deleteAllVideoStatuses } from "../mongo/collections/videoStatus";
+import axios from "axios";
+import { env } from "~/env.mjs";
+import { ObjectId } from "mongodb";
 
 
 export const cameraVideoRouter = createTRPCRouter({
@@ -12,7 +16,7 @@ export const cameraVideoRouter = createTRPCRouter({
 
     getAll: publicProcedure
         .query(async () => {
-            return await getAllCameraVideos();
+            return await getAllCameraVideosWithoutFramesProjection();
         }),
     getAllByLocationId: publicProcedure
         .input(z.string())
@@ -23,5 +27,15 @@ export const cameraVideoRouter = createTRPCRouter({
         .input(z.number())
         .query(async ({ input }) => {
             return await getLowConfidenceDetections(input);
+        }),
+    deleteAll: publicProcedure
+        .mutation(async () => {
+            await deleteAllCameraVideos()
+            await deleteAllVideoStatuses()
+            const reponse  = await axios.post(`${env.BACKEND_API_URL}/deleteAll`)
+            if (reponse.status !== 200) {
+                throw new Error("Failed to delete all camera videos")
+            }
+            return "Deleted all camera videos"
         }),
 });

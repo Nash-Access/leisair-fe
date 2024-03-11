@@ -30,3 +30,8 @@ export const getAllVideoStatuses = async () => {
     const collection = await getCollection()
     return await collection.find().toArray()
 }
+
+export const deleteAllVideoStatuses = async () => {
+    const collection = await getCollection()
+    return await collection.deleteMany({})
+}

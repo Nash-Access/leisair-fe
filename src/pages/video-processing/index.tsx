@@ -5,7 +5,6 @@ import VideoProcessingStatus from '~/components/Tasks/VideoStatus';
 
 const UploadVideoPage = () => {
 
-
     return (
         <>
             <Head>
@@ -28,4 +27,4 @@ const UploadVideoPage = () => {
     );
 };
 
-export default UploadVideoPage;
+export default UploadVideoPage

@@ -4,6 +4,7 @@ import { videoStatusRouter } from "./routers/videoStatus";
 import { cameraVideoRouter } from "./routers/cameraVideo";
 import { vesselCorrectionsRouter } from "./routers/vesselCorrections";
 import { appUpdateRouter } from "./routers/appUpdate";
+import { mlModelRouter } from "./routers/mlModels";
 
 
 export const appRouter = createTRPCRouter({
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   cameraVideos: cameraVideoRouter,
   vesselCorrections: vesselCorrectionsRouter,
   appUpdate: appUpdateRouter,
+  mlModels: mlModelRouter,
 });
 
 // export type definition of API

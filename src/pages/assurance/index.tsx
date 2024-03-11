@@ -112,6 +112,7 @@ const Assurance = () => {
             ...selectedDetection,
             image: imageSrc,
             type: correctedClass as VesselType,
+            used: false,
         }
         toast.success("Correction added successfully");
         await insertVesselCorrection.mutateAsync(newCorrection);
@@ -177,7 +178,7 @@ const Assurance = () => {
                         </div>
                         <div className='relative grow'>
                             <div className="absolute inset-0">
-                                <h3 className="text-2xl font-bold">Low Confidence Frames ({rows.length} left)</h3>
+                                <h3 className="text-2xl font-bold">Low Confidence Frames ({rows.length === 100 && ">"}{rows.length} left)</h3>
                                 <div className="py-12 absolute inset-0">
                                     <div className="w-full h-full flex flex-col gap-4">
                                         <div className="flex-1 overflow-hidden pb-12">
